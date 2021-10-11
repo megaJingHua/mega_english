@@ -4,7 +4,7 @@
     <div v-for="(item, i) in randomEnglish" :key="i">
       <p>{{ item.english }} ({{ item.part_of_speech }}){{ item.chinese }}</p>
     </div>
-    <button type="button" @click="handleClickRandom">random</button>
+    <b-button variant="outline-danger" @click="handleClickRandom">random</b-button>
   </div>
 </template>
 
@@ -24,17 +24,13 @@ export default {
   methods: {
     getEnglishData() {
       this.axios
-        .get(
-          "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9A2cjX-BE7vBbMgGlJdR9HU1AyfVHtQ-0DBNCk4HldodGRyh13_Nrmfk0sDx1Le-tsZf36BRrKxma/pub?gid=0&single=true&output=csv"
-        )
+        .get(localStorage.getItem("dataBaseCheckt"))
         .then((e) => {
           this.allEnglish = this.$papa.parse(e.data, { header: true }).data;
-          console.log(this.allEnglish)
           this.handleClickRandom();
         });
     },
     handleClickRandom() {
-        console.log("handleClickRandomhandleClickRandom")
       this.randomEnglish = this.getRandomArrayElements(this.allEnglish, 5);
     },
     getRandomArrayElements(arr, count) {

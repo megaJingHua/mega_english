@@ -1,9 +1,13 @@
 <template>
   <div id="app">
     <div class="container">
-      <img alt="Vue logo" src="./assets/logo.png" />
-      <b-row class="justify-content-md-center">
-        <b-col cols="6">
+      <b-row class="justify-content-center">
+        <b-col cols="12" lg="4">
+          <img alt="Vue logo" src="./assets/logo.png" style="width: 100%" />
+        </b-col>
+      </b-row>
+      <b-row class="justify-content-center">
+        <b-col cols="12" lg="6">
           <b-input-group prepend="資料庫連結" size="sm">
             <b-form-input
               @input="eventBaseUrl"
@@ -16,17 +20,14 @@
         <p v-if="dataBaseCheckt == false" class="error">{{ dataBaseError }}</p>
       </b-row>
 
-      <b-row class="justify-content-md-center mt-3">
-        <b-col cols="6">
+      <b-row class="justify-content-center mt-3">
+        <b-col>
           <b-button-group size="md">
             <b-button
               variant="outline-danger"
               @click="$bvModal.show('modal-random-english')"
               :disabled="!dataBaseCheckt"
               >隨機英文單字</b-button
-            >
-            <b-button variant="outline-secondary" :disabled="true"
-              >隨機文法</b-button
             >
             <b-button
               variant="outline-danger"
@@ -35,10 +36,20 @@
               >英文單字庫</b-button
             >
             <b-button variant="outline-secondary" :disabled="true"
-              >文法庫</b-button
+              >單字測驗</b-button
+            >
+          </b-button-group>
+        </b-col>
+      </b-row>
+
+      <b-row class="justify-content-center mt-3">
+        <b-col>
+          <b-button-group size="md">
+            <b-button variant="outline-secondary" :disabled="true"
+              >隨機文法</b-button
             >
             <b-button variant="outline-secondary" :disabled="true"
-              >單字測驗</b-button
+              >文法庫</b-button
             >
             <b-button variant="outline-secondary" :disabled="true"
               >文法測驗</b-button
@@ -61,18 +72,11 @@
         </template>
 
         <template #default>
-          <b-table
-            striped
-            hover
-            :items="allEnglish"
-          ></b-table>
+          <b-table striped hover :items="allEnglish"></b-table>
         </template>
 
-        <template #modal-footer="{ok}">
-          <b-button
-            size="sm"
-            variant="outline-danger"
-            @click="ok()"
+        <template #modal-footer="{ ok }">
+          <b-button size="sm" variant="outline-danger" @click="ok()"
             >ok</b-button
           >
         </template>
@@ -145,6 +149,11 @@ export default {
       this.dataBaseError = "";
       if (e == "") {
         this.dataBaseCheckt = null;
+        return;
+      }
+      if (e.indexOf("csv") < 0) {
+        this.dataBaseCheckt = false;
+        this.dataBaseError = "請確認資料庫連結是否正確且為.csv";
         return;
       }
       try {
